@@ -1,0 +1,52 @@
+.list {
+
+}
+
+$list-bg: #fff;
+
+.list--file {
+  margin-top: $line-height-computed*2;
+}
+
+.list__item {
+  position: relative;
+  display: block;
+  margin: $line-height-computed 0;
+  padding: $line-height-computed;
+
+  background: $list-bg;
+
+  a {
+    color: $gray-light;
+  }
+
+  &:hover,
+  &:active,
+  &:focus {
+    .list__delete-icon {
+      opacity: 1;
+      transition: opacity .3s;
+    }
+  }
+}
+
+.list__icon {
+  opacity: .7;
+  margin-right: $line-height-computed;
+}
+
+.list__delete-icon {
+  @include btn-reset;
+  opacity: 0;
+
+  position: absolute;
+  bottom: $line-height-computed;
+  right: $line-height-computed;
+
+  &:hover,
+  &:active,
+  &:focus {
+    color: $btn-danger-bg;
+  }
+
+}
