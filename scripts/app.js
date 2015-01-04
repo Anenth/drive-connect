@@ -55,7 +55,6 @@ module.exports = Config;
 
 var React = require('react/addons'),
 config = require('../config');
-// googleClientApi = require( 'google-client-api' );
 
 var GdriveConnect = React.createClass({displayName: "GdriveConnect",
   SCOPES: config.GOOGLE_API_SCOPES,
@@ -252,8 +251,14 @@ var GdriveFilesList = React.createClass({displayName: "GdriveFilesList",
       )}, this);
     }
     return (
-      React.createElement("ul", {className: "list--file"}, 
-      files ? files : 'No files or Drive not connect (Click on the above button to connect Drive)'
+      React.createElement("div", null, 
+        React.createElement("ul", {className: "list--file"}, 
+          files
+        ), 
+
+        React.createElement("p", {className: 'text-center alert alert-warning' + (files? ' hide' : '')}, 
+          "No files/ Google Drive not connect (Click on the above button to connect Google Drive)"
+        )
       )
     );
   }
