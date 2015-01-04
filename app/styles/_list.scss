@@ -25,7 +25,8 @@ $list-bg: #fff;
   &:focus {
     .list__delete-icon {
       opacity: 1;
-      transition: opacity .3s;
+      transform: translateX(0);
+      transition: all .3s ease-in-out;
     }
   }
 }
@@ -34,14 +35,18 @@ $list-bg: #fff;
   opacity: .7;
   margin-right: $line-height-computed;
 }
-
+$icon-size: 30px;
 .list__delete-icon {
   @include btn-reset;
-  opacity: 0;
-
   position: absolute;
-  bottom: $line-height-computed;
+  top: $line-height-computed;
   right: $line-height-computed;
+
+  opacity: 0;
+  transform: translateX($icon-size);
+
+  color: $gray-light;
+  cursor: pointer;
 
   &:hover,
   &:active,
