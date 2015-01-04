@@ -2,7 +2,6 @@
 
 var React = require('react/addons'),
 config = require('../config');
-// googleClientApi = require( 'google-client-api' );
 
 var GdriveConnect = React.createClass({
   SCOPES: config.GOOGLE_API_SCOPES,

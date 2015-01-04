@@ -56,9 +56,15 @@ var GdriveFilesList = React.createClass({
       )}, this);
     }
     return (
-      <ul className='list--file'>
-      {files ? files : 'No files or Drive not connect (Click on the above button to connect Drive)'}
-      </ul>
+      <div>
+        <ul className='list--file'>
+          {files}
+        </ul>
+
+        <p className={'text-center alert alert-warning' + (files? ' hide' : '')}>
+          No files/ Google Drive not connect (Click on the above button to connect Google Drive)
+        </p>
+      </div>
     );
   }
 });
