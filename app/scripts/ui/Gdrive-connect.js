@@ -1,6 +1,6 @@
 'use strict';
 
-var React = require('react'),
+var React = require('react/addons'),
 config = require('../config');
 // googleClientApi = require( 'google-client-api' );
 
@@ -41,20 +41,24 @@ var GdriveConnect = React.createClass({
 
   checkAuth: function() {
     gapi.auth.authorize(
-        {'client_id': this.CLIENT_ID, 'scope': this.SCOPES, 'immediate': false},
-        this.handleAuthResult);
+      {'client_id': this.CLIENT_ID, 'scope': this.SCOPES, 'immediate': true},
+      this.handleAuthResult);
   },
 
   handleAuthResult: function(authResult) {
     if (authResult && !authResult.error) {
+
       this.setState({
         connected: true,
         token: authResult.access_token
       });
 
-      this.loadFiles();
+      this.loadClient(this.loadFiles);
 
     } else {
+      gapi.auth.authorize(
+        {'client_id': this.CLIENT_ID, 'scope': this.SCOPES, 'immediate': false},
+        this.handleAuthResult);
       this.setState({connected: false})
     }
   },
@@ -67,27 +71,48 @@ var GdriveConnect = React.createClass({
     }
   },
 
-  loadFiles: function() {
-    // $.getJSON('https://www.googleapis.com/drive/v2/files', function(data){
-    //   console.log(data);
-    // })
+  loadClient: function(callback) {
+   gapi.client.load('drive', 'v2', callback);
+  },
 
-    var xhr = new XMLHttpRequest(),
-    self = this;
-    xhr.open("GET", "https://www.googleapis.com/drive/v2/files", true);
-    xhr.setRequestHeader("Authorization", "Bearer " + this.state.token);
-    xhr.onload = function (evt) {
-      var response = JSON.parse(xhr.responseText);
-      self.props.updateFiles(response.items, self.state.token);
-   };
-   xhr.send();
+  retrievePageOfFiles: function(request, result, callback) {
+    request.execute(function(resp) {
+      result = result.concat(resp.items);
+      var nextPageToken = resp.nextPageToken;
+      if (nextPageToken) {
+        request = gapi.client.drive.files.list({
+          'pageToken': nextPageToken
+        });
+        retrievePageOfFiles(request, result, callback);
+      } else {
+        callback(result);
+      }
+    });
+  },
+
+  retrieveFiles: function(request, callback) {
+    request.execute(function(resp) {
+        callback(resp.items);
+      });
+  },
+
+  loadFiles: function() {
+    var initialRequest = gapi.client.drive.files.list();
+    this.retrieveFiles(initialRequest, this.props.updateFiles);
 
   },
 
   render: function() {
+    var cx = React.addons.classSet;
+    var btnClasses = cx({
+      'btn'           : true,
+      'btn-success'   : !this.state.connected,
+      'btn-warning'   : this.state.connected
+    });
+
     return (
       <button
-        className='btn btn-default'
+        className={btnClasses}
         onClick={this.handleButtonClick}>
         {this.state.connected ? 'Disconnect from ' : 'Connect to ' } Google Drive
       </button>

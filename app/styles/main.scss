@@ -1,17 +1,20 @@
-$icon-font-path: "/bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
+$icon-font-path: '/bower_components/bootstrap-sass-official/assets/fonts/bootstrap/';
 
 $body-bg: #f5f5f5;
 
-@import "bootstrap-sass-official/assets/stylesheets/bootstrap",
+@import 'bootstrap-sass-official/assets/stylesheets/bootstrap',
 'button',
-"list";
+'list';
 
 .header {
-  border-bottom: 1px solid $gray-lighter;
 }
 
 .app {
   min-height: 500px;
+
+  .list--file {
+    margin-top: 20px // margin from the navbar;
+  }
 }
 
 .footer {

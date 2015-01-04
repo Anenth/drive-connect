@@ -15,17 +15,17 @@ var GdriveFilesList = React.createClass({
   deleteFile: function(e) {
     var $target = $(e.target).closest('.'+this.selector.listName);
     var file = this.props.files[$target.data('id')];
-    if(confirm('Are you sure you want to delete ' + file.title + ' ?')){
-      var xhr = new XMLHttpRequest();
-      xhr.open("DELETE", "https://www.googleapis.com/drive/v2/files/" + file.id, true);
-      xhr.setRequestHeader("Authorization", "Bearer " + this.props.token);
-      xhr.onload = function (evt) {
-        $target.fadeOut('fast');
-      };
-     xhr.send();
-    }
-  },
 
+    if(confirm('Are you sure you want to delete ' + file.title + ' ?')){
+     var request = gapi.client.drive.files.delete({
+        'fileId': file.id
+      });
+      request.execute(function(resp) {
+        $target.fadeOut('fast');
+      });
+    }
+
+  },
 
   render: function() {
     var files;

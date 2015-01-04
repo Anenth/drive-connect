@@ -6751,7 +6751,6 @@ button.close {
   }
 }
 .list--file {
-  margin-top: 40px;
   padding: 0;
 }
 
@@ -6788,12 +6787,11 @@ button.close {
   color: #d9534f;
 }
 
-.header {
-  border-bottom: 1px solid #eeeeee;
-}
-
 .app {
   min-height: 500px;
+}
+.app .list--file {
+  margin-top: 20px;
 }
 
 .footer {

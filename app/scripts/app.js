@@ -21,8 +21,10 @@ var GdriveApp = React.createClass({
     return(
       <div>
 
-        <ConnectButton
-          updateFiles={this.updateFiles}/>
+        <div className='text-center'>
+          <ConnectButton
+            updateFiles={this.updateFiles}/>
+        </div>
 
         <FilesList
           files={this.state.files}
