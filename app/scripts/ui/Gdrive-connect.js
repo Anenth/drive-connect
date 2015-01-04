@@ -15,29 +15,11 @@ var GdriveConnect = React.createClass({
   },
 
   componentWillMount: function() {
-    var self = this;
-    // require( 'google-client-api' )( function( gapi ) {
-    //   debugger;
-
-    //   function loadClient(callback) {
-    //     gapi.client.load('drive', 'v2', callback);
-    //   }
-    //   function callback() {
-    //     console.log(gapi);
-    //     self.checkAuth()
-    //   }
-    //   loadClient(callback);
-    // this.api = gapi;
-    // });
   },
 
   componentDidMount: function() {
-    // this.checkAuth();
+    this.checkAuth();
   },
-
-  componentWillUnmount: function() {
-  },
-
 
   checkAuth: function() {
     gapi.auth.authorize(
@@ -45,13 +27,26 @@ var GdriveConnect = React.createClass({
       this.handleAuthResult);
   },
 
+  disconnect: function() {
+    var self = this;
+    $.ajax({
+      type: 'GET',
+      url: 'https://accounts.google.com/o/oauth2/revoke?token=' +
+         gapi.auth.getToken().access_token,
+      async: false,
+      contentType: 'application/json',
+      dataType: 'jsonp',
+      success: function(result) {
+        self.updateFiles();
+      },
+      error: function(e) {
+       console.error(e);
+      }
+    });
+  },
+
   handleAuthResult: function(authResult) {
     if (authResult && !authResult.error) {
-
-      this.setState({
-        connected: true,
-        token: authResult.access_token
-      });
 
       this.loadClient(this.loadFiles);
 
@@ -59,15 +54,18 @@ var GdriveConnect = React.createClass({
       gapi.auth.authorize(
         {'client_id': this.CLIENT_ID, 'scope': this.SCOPES, 'immediate': false},
         this.handleAuthResult);
-      this.setState({connected: false})
     }
   },
 
   handleButtonClick: function() {
+    this.setState({
+      loading: true,
+    });
+
     if(!this.state.connected) {
       this.checkAuth();
     }else{
-
+      this.disconnect();
     }
   },
 
@@ -98,8 +96,24 @@ var GdriveConnect = React.createClass({
 
   loadFiles: function() {
     var initialRequest = gapi.client.drive.files.list();
-    this.retrieveFiles(initialRequest, this.props.updateFiles);
+    this.retrieveFiles(initialRequest, this.updateFiles);
 
+  },
+
+  updateFiles: function(items) {
+    if(items) {
+      this.props.updateFiles(items);
+      this.setState({
+        loading: false,
+        connected: true,
+      });
+    }else{
+      this.props.updateFiles(null);
+      this.setState({
+        loading: false,
+        connected: false,
+      });
+    }
   },
 
   render: function() {
@@ -113,8 +127,9 @@ var GdriveConnect = React.createClass({
     return (
       <button
         className={btnClasses}
+        disabled={this.state.loading}
         onClick={this.handleButtonClick}>
-        {this.state.connected ? 'Disconnect from ' : 'Connect to ' } Google Drive
+        {this.state.connected ? 'Disconnect from ' : this.state.loading ? 'Connecting to' : 'Connect to ' } Google Drive
       </button>
     );
   }

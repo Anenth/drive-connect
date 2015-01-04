@@ -10,10 +10,9 @@ var GdriveApp = React.createClass({
     return { files: null};
   },
 
-  updateFiles: function(files, token){
+  updateFiles: function(files){
     this.setState({
-      files: files,
-      token: token
+      files: files
     });
   },
 
@@ -27,8 +26,7 @@ var GdriveApp = React.createClass({
         </div>
 
         <FilesList
-          files={this.state.files}
-          token={this.state.token}/>
+          files={this.state.files}/>
 
       </div>
     );
