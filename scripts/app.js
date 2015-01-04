@@ -257,7 +257,7 @@ var GdriveFilesList = React.createClass({displayName: "GdriveFilesList",
         ), 
 
         React.createElement("p", {className: 'text-center alert alert-warning' + (files? ' hide' : '')}, 
-          "No files/ Google Drive not connect (Click on the above button to connect Google Drive)"
+          "No files/Google Drive not connect (Click on the above button to connect Google Drive)"
         )
       )
     );

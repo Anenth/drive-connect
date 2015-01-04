@@ -6766,8 +6766,11 @@ button.close {
 }
 .list__item:hover .list__delete-icon, .list__item:active .list__delete-icon, .list__item:focus .list__delete-icon {
   opacity: 1;
-  -webkit-transition: opacity .3s;
-          transition: opacity .3s;
+  -webkit-transform: translateX(0);
+      -ms-transform: translateX(0);
+          transform: translateX(0);
+  -webkit-transition: all .3s ease-in-out;
+          transition: all .3s ease-in-out;
 }
 
 .list__icon {
@@ -6778,10 +6781,15 @@ button.close {
 .list__delete-icon {
   border: none;
   background: transparent;
-  opacity: 0;
   position: absolute;
-  bottom: 20px;
+  top: 20px;
   right: 20px;
+  opacity: 0;
+  -webkit-transform: translateX(30px);
+      -ms-transform: translateX(30px);
+          transform: translateX(30px);
+  color: #777777;
+  cursor: pointer;
 }
 .list__delete-icon:hover, .list__delete-icon:active, .list__delete-icon:focus {
   color: #d9534f;
